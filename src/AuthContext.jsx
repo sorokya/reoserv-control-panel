@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useEasyToast } from 'easy-toast-react-bootstrap';
-import { Toast } from 'react-bootstrap';
 import ErrorToast from './ErrorToast';
 
 // Create the AuthContext
@@ -9,7 +8,7 @@ const AuthContext = createContext();
 
 // Create a provider component
 const AuthProvider = ({ children }) => {
-  const [showToast, closeToast] = useEasyToast();
+  const [showToast] = useEasyToast();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 

@@ -37,7 +37,7 @@ function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button variant="outline-success" type="submit">
+      <Button variant="success" type="submit">
         Login
       </Button>
     </form>
