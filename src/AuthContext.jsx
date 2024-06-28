@@ -1,11 +1,15 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useEasyToast } from 'easy-toast-react-bootstrap';
+import { Toast } from 'react-bootstrap';
+import ErrorToast from './ErrorToast';
 
 // Create the AuthContext
 const AuthContext = createContext();
 
 // Create a provider component
 const AuthProvider = ({ children }) => {
+  const [showToast, closeToast] = useEasyToast();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -37,7 +41,9 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Incorrect username or password, please try again');
+      showToast(
+        <ErrorToast message="Incorrect username or password, please try again" />,
+      );
     }
   };
 

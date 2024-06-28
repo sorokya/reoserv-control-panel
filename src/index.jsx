@@ -9,6 +9,7 @@ import TopPlayers from './pages/TopPlayers';
 import OnlinePlayers from './pages/OnlinePlayers';
 import './scss/custom.scss';
 import { AuthProvider } from './AuthContext';
+import { EasyToastContainer } from 'easy-toast-react-bootstrap';
 
 const router = createBrowserRouter([
   {
@@ -37,10 +38,16 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
-    </AuthProvider>
+    <EasyToastContainer
+      position="top-end"
+      className="p-3"
+      style={{ marginTop: '52px' }}
+    >
+      <AuthProvider>
+        <RouterProvider router={router}>
+          <App />
+        </RouterProvider>
+      </AuthProvider>
+    </EasyToastContainer>
   </React.StrictMode>,
 );
