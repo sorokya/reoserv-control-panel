@@ -8,6 +8,7 @@ import TopGuilds from './pages/TopGuilds';
 import TopPlayers from './pages/TopPlayers';
 import OnlinePlayers from './pages/OnlinePlayers';
 import './scss/custom.scss';
+import { AuthProvider } from './AuthContext';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +37,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
+    </AuthProvider>
   </React.StrictMode>,
 );
