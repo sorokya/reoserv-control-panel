@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 import { CiLogout } from 'react-icons/ci';
+import { FaHammer, FaUsers } from 'react-icons/fa';
+import { FaEarthAmericas } from 'react-icons/fa6';
 import { MdManageAccounts } from 'react-icons/md';
 
 import {
@@ -14,7 +16,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { upperFirst } from '../utils/upperFirst';
 
 function Profile() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, isAdmin, logout } = useContext(AuthContext);
 
   return (
     <Dropdown>
@@ -30,8 +32,8 @@ function Profile() {
       <DropdownMenu>
         <LinkContainer to="/account">
           <DropdownItem>
-            <MdManageAccounts className="align-text-middle" />
-            &nbsp; Manage Account
+            <MdManageAccounts />
+            &nbsp; Account
           </DropdownItem>
         </LinkContainer>
         <DropdownHeader>Characters</DropdownHeader>
@@ -40,9 +42,42 @@ function Profile() {
             <DropdownItem>{upperFirst(character.name)}</DropdownItem>
           </LinkContainer>
         ))}
+
+        {isAdmin ? (
+          <>
+            <DropdownDivider />
+            <DropdownHeader>Admin</DropdownHeader>
+            <LinkContainer to="/bans">
+              <DropdownItem>
+                <FaHammer />
+                &nbsp;Bans
+              </DropdownItem>
+            </LinkContainer>
+            <LinkContainer to="/accounts">
+              <DropdownItem>
+                <FaUsers />
+                &nbsp;Accounts
+              </DropdownItem>
+            </LinkContainer>
+            <LinkContainer to="/characters">
+              <DropdownItem>
+                <FaUsers />
+                &nbsp;Characters
+              </DropdownItem>
+            </LinkContainer>
+            <LinkContainer to="/maps">
+              <DropdownItem>
+                <FaEarthAmericas />
+                &nbsp;Maps
+              </DropdownItem>
+            </LinkContainer>
+          </>
+        ) : (
+          ''
+        )}
         <DropdownDivider />
         <DropdownItem onClick={logout}>
-          <CiLogout className="align-text-middle" />
+          <CiLogout />
           &nbsp; Logout
         </DropdownItem>
       </DropdownMenu>

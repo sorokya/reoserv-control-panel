@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { useEasyToast } from 'easy-toast-react-bootstrap';
 import ErrorToast from './ErrorToast';
@@ -11,6 +11,11 @@ const AuthProvider = ({ children }) => {
   const [showToast] = useEasyToast();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const isAdmin = useMemo(
+    () => user?.admin_level.indexOf('GameMaster') > -1,
+    [user],
+  );
 
   useEffect(() => {
     // Check for the token in the cookies when the component mounts
@@ -57,7 +62,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, login, logout, isAdmin }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,15 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useEasyToast } from 'easy-toast-react-bootstrap';
 import { Button, Col, FormControl, FormGroup } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import ErrorToast from '../ErrorToast';
 
 function Account() {
-  const navigate = useNavigate();
-  const [showToast] = useEasyToast();
-  const { isPending, error, data } = useQuery({
+  const { isPending, isError, data } = useQuery({
     queryKey: ['account'],
+    retry: false,
     queryFn: async () => {
       const response = await axios.get('/api/account', {
         withCredentials: true,
@@ -21,12 +17,7 @@ function Account() {
 
   if (isPending) return 'Loading...';
 
-  if (error) {
-    showToast(
-      <ErrorToast message="There was a problem loading your account" />,
-    );
-    return navigate('/');
-  }
+  if (isError) return 'Error...';
 
   return (
     <>

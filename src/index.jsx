@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
 import TopGuilds from './pages/TopGuilds';
 import TopPlayers from './pages/TopPlayers';
 import OnlinePlayers from './pages/OnlinePlayers';
@@ -11,7 +12,8 @@ import Account from './pages/Account';
 import './scss/custom.scss';
 import { AuthProvider } from './AuthContext';
 import { EasyToastContainer } from 'easy-toast-react-bootstrap';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Bans from './pages/Bans';
+import Maps from './pages/Maps';
 
 const router = createBrowserRouter([
   {
@@ -38,11 +40,21 @@ const router = createBrowserRouter([
         path: '/online-players',
         element: <OnlinePlayers />,
       },
+      {
+        path: '/bans',
+        element: <Bans />,
+      },
+      {
+        path: '/maps',
+        element: <Maps />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
     ],
   },
 ]);
-
-const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -52,11 +64,9 @@ createRoot(document.getElementById('root')).render(
       style={{ marginTop: '52px' }}
     >
       <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router}>
-            <App />
-          </RouterProvider>
-        </QueryClientProvider>
+        <RouterProvider router={router}>
+          <App />
+        </RouterProvider>
       </AuthProvider>
     </EasyToastContainer>
   </React.StrictMode>,
