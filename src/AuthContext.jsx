@@ -11,6 +11,7 @@ const AuthProvider = ({ children }) => {
   const [showToast] = useEasyToast();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pending, setPending] = useState(true);
 
   const isAdmin = useMemo(
     () => user?.admin_level.indexOf('GameMaster') > -1,
@@ -28,6 +29,8 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
+      } finally {
+        setPending(false);
       }
     };
     checkAuth();
@@ -63,7 +66,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, isAdmin }}
+      value={{ user, isAuthenticated, login, logout, isAdmin, pending }}
     >
       {children}
     </AuthContext.Provider>

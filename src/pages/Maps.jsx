@@ -2,32 +2,33 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 import { FaEarthAmericas } from 'react-icons/fa6';
-import { Col, FormControl, InputGroup, Row, Table } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  FormControl,
+  InputGroup,
+  Row,
+  Table,
+} from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 import { FaArrowDown, FaArrowUp, FaSearch } from 'react-icons/fa';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useGetMapList } from '../hooks';
 
 function Maps() {
   const navigate = useNavigate();
-  const { isAdmin, isAuthenticated } = useContext(AuthContext);
+  const {
+    isAdmin,
+    isAuthenticated,
+    pending: authPending,
+  } = useContext(AuthContext);
   useEffect(() => {
-    if (!isAdmin || !isAuthenticated) {
+    if (!authPending && (!isAdmin || !isAuthenticated)) {
       return navigate('/', { replace: true });
     }
-  }, [isAuthenticated, isAdmin, navigate]);
+  }, [isAuthenticated, isAdmin, navigate, authPending]);
 
-  const { isPending, isError, data } = useQuery({
-    queryKey: ['maps'],
-    retry: false,
-    queryFn: async () => {
-      const response = await axios.get('/api/maps/list', {
-        withCredentials: true,
-      });
-
-      return response.data;
-    },
-  });
+  const { isPending, isError, data } = useGetMapList();
 
   const [sort, setSort] = useState({ col: 'id', direction: 'asc' });
   const [filter, setFilter] = useState('');
@@ -49,10 +50,20 @@ function Maps() {
     () =>
       data
         ? [...data]
-            .filter((map) => map.name.toLowerCase().indexOf(filter) > -1)
+            .filter(
+              (map) =>
+                map.name.toLowerCase().indexOf(filter.toLowerCase()) > -1,
+            )
             .sort((a, b) => {
               if (sort.direction === 'asc') {
+                if (typeof a[sort.col] === 'string') {
+                  return a[sort.col].localeCompare(b[sort.col]);
+                }
+
                 return a[sort.col] - b[sort.col];
+              }
+              if (typeof a[sort.col] === 'string') {
+                return b[sort.col].localeCompare(a[sort.col]);
               }
               return b[sort.col] - a[sort.col];
             })
@@ -90,8 +101,15 @@ function Maps() {
         <thead>
           <tr>
             <th onClick={() => changeSort('id')} style={{ cursor: 'pointer' }}>
-              Map
+              ID
               {sort.col === 'id' ? SortIcon : ''}
+            </th>
+            <th
+              onClick={() => changeSort('name')}
+              style={{ cursor: 'pointer' }}
+            >
+              Name
+              {sort.col === 'name' ? SortIcon : ''}
             </th>
             <th
               onClick={() => changeSort('players')}
@@ -114,17 +132,25 @@ function Maps() {
               NPCs
               {sort.col === 'npcs' ? SortIcon : ''}
             </th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
           {sortedData.map((map) => (
             <tr key={map.id}>
-              <td>
-                {map.id} - {map.name || 'Unnamed'}
-              </td>
+              <td>{map.id} </td>
+              <td>{map.name || '-'}</td>
               <td>{map.players}</td>
               <td>{map.items}</td>
               <td>{map.npcs}</td>
+              <td>
+                <LinkContainer to={`/maps/${map.id}`}>
+                  <Button variant="primary" size="sm">
+                    <FaSearch />
+                    &nbsp; View
+                  </Button>
+                </LinkContainer>
+              </td>
             </tr>
           ))}
         </tbody>

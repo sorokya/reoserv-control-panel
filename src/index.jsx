@@ -14,6 +14,7 @@ import { AuthProvider } from './AuthContext';
 import { EasyToastContainer } from 'easy-toast-react-bootstrap';
 import Bans from './pages/Bans';
 import Maps from './pages/Maps';
+import MapPage from './pages/Map';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: '/maps',
         element: <Maps />,
+      },
+      {
+        path: '/maps/:mapId',
+        element: <MapPage />,
       },
       {
         path: '*',

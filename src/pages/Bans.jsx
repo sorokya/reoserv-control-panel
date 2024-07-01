@@ -14,12 +14,16 @@ import { useNavigate } from 'react-router-dom';
 
 function Bans() {
   const navigate = useNavigate();
-  const { isAdmin, isAuthenticated } = useContext(AuthContext);
+  const {
+    isAdmin,
+    isAuthenticated,
+    pending: authPending,
+  } = useContext(AuthContext);
   useEffect(() => {
-    if (!isAdmin || !isAuthenticated) {
+    if (!authPending && (!isAdmin || !isAuthenticated)) {
       return navigate('/', { replace: true });
     }
-  }, [isAuthenticated, isAdmin, navigate]);
+  }, [isAuthenticated, isAdmin, navigate, authPending]);
 
   return (
     <>
