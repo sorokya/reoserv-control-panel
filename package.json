@@ -15,7 +15,7 @@
     "vite": "^5.3.4"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.51.11",
+    "@tanstack/react-query": "^5.51.24",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "easy-toast-react-bootstrap": "^1.0.9",
